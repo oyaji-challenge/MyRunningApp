@@ -22,7 +22,7 @@ def init_connection():
         st.error(f"Google Cloudとの接続に失敗しました。鍵ファイル(secret.json)を確認してください: {e}")
         return None
     
-gc = init_connenction()
+gc = init_connection()
 
 #あなたのGoogleスプレッドシート名(必要に応じて書き換えてください)
 #※このIDや名前は一般に公開されてもセキュリティ上問題ありません
