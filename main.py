@@ -74,7 +74,7 @@ if submit_button:
             row = [str(date), distance, duration_min, comment]
 
             # シートの最下行にデータを追加
-            worksheet.append_row(row)
+            worksheet.append_row(row, value_input_option="USER_ENTERED")
 
             st.success(f"🎉 記録を保存しました！ ({date} : {distance}km)")
         except Exception as e:
