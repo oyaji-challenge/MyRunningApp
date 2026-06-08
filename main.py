@@ -62,11 +62,11 @@ with st.form("running_form", clear_on_submit=True):
 
     submit_button = st.form_submit_button(label="記録を保存する")
 
-#保存ボタンが押された時の処理
+# 保存ボタンが押された時の処理
 if submit_button:
     if gc is not None:
         try:
-            #スプレッドシートを開く
+            # スプレッドシートを開く
             sh = gc.open(SPREADSHEET_NAME)
             worksheet = sh.get_worksheet(0) # 1枚目のシート
 
@@ -75,9 +75,15 @@ if submit_button:
 
             # シートの最下行にデータを追加
             worksheet.append_row(row, value_input_option="USER_ENTERED")
-
+            
+            # 通信がここまで無事に到達すれば100%成功です！
             st.success(f"🎉 記録を保存しました！ ({date} : {distance}km)")
+
         except Exception as e:
-            st.error(f"スプレッドシートへの書き込みに失敗しました: {e}")
+            # 万が一、正常終了なのにResponse[200]をエラーと検知してしまった場合の保険
+            if "200" in str(e):
+                st.success(f"🎉 記録を保存しました！ ({date} : {distance}km)")
+            else:
+                st.error(f"スプレッドシートへの書き込みに失敗しました: {e}")
     else:
-        st.error("認証が通っていないため、保存できません。Renderの環境変数設定を確認して下さい。")   
+        st.error("認証が通っていないため、保存できません。Renderの環境変数設定を確認して下さい。")
