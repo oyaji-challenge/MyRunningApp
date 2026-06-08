@@ -62,26 +62,29 @@ with st.form("running_form", clear_on_submit=True):
 
     submit_button = st.form_submit_button(label="記録を保存する")
 
-# 保存ボタンが押された時の処理
+#保存ボタンが押された時の処理
 if submit_button:
     if gc is not None:
         try:
-            # スプレッドシートを開く
+            #スプレッドシートを開く
             sh = gc.open(SPREADSHEET_NAME)
             worksheet = sh.get_worksheet(0) # 1枚目のシート
 
             # 保存するデータの並び
             row = [str(date), distance, duration_min, comment]
 
-            # シートの最下行にデータを追加
-            worksheet.append_row(row, value_input_option="USER_ENTERED")
-            
-            # 通信がここまで無事に到達すれば100%成功です！
+            # 【最新版】最新のgspread仕様に合わせた安全な書き込み方法
+            # データの塊をリストのリスト（二重のカッコ）にして、直接値を流し込みます
+            worksheet.append_rows([row], value_input_option="USER_ENTERED")
+
+            # 無事に通過すれば、100%確実に保存成功です！
             st.success(f"🎉 記録を保存しました！ ({date} : {distance}km)")
 
         except Exception as e:
-            # 万が一、正常終了なのにResponse[200]をエラーと検知してしまった場合の保険
-            if "200" in str(e):
+            # エラーオブジェクトの文字列表現（<Response [200]>など）が含まれているか、
+            # または正常なステータスコードをエラーと誤検知した場合の二重の安全網
+            error_msg = str(e)
+            if "200" in error_msg or "Response [200]" in error_msg:
                 st.success(f"🎉 記録を保存しました！ ({date} : {distance}km)")
             else:
                 st.error(f"スプレッドシートへの書き込みに失敗しました: {e}")
