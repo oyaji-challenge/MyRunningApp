@@ -6,7 +6,7 @@ from google.oauth2.service_account import Credentials
 import datetime
 
 # 【追加】カレンダーの曜日の修正
-#st.set_page_config(page_title="RUNNING LOG", layout="centered")
+st.set_page_config(page_title="RUNNING LOG", layout="centered")
 
 
 #==============================================
@@ -77,10 +77,11 @@ if submit_button:
 
             #【自動化】日付(A列)を基準に自動でさかのぼるための積算数式を生成
             formula_7d = f'=SUMIFS(B:B, A:A, ">="&(A{next_row}-6), A:A, "<="&A{next_row})'
-            formula_30d = f'=SUMIFS(B:B, A:A,">="&(A{next_row}-29), A:A, "<="&A{next_row})'
+            formula_30d = f'=SUMIFS(B:B, A:A, ">="&(A{next_row}-29), A:A, "<="&A{next_row})'
 
-            #保存するデータの並び(日付はstr()を外して本物の日付オブジェクトとして送信)
-            row = [date, distance, duration_min, formula_7d, formula_30d, comment]
+            #日付をスプレッドシートが100％自動認識できる文字形式に変換して送信
+            date_str = date.strftime("%Y-%m-%d")
+            row = [date_str, distance, duration_min, formula_7d, formula_30d, comment]
 
             # 最新のgspread仕様に合わせた、リストのリスト形式で一括流し込み
             worksheet.append_rows([row], value_input_option="USER_ENTERED")
