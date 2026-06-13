@@ -59,7 +59,6 @@ st.write("日々のランニング記録をスプレッドシートに安全に�
 with st.form("running_form", clear_on_submit=True):
     date = st.date_input("日付", datetime.date.today())
     distance = st.number_input("走行距離(km)", min_value=0.0, max_value=100.0, step=0.1, format="%.1f")
-    duration_min = st.number_input("時間(分)", min_value=0, max_value=600, step=1)
     comment = st.text_input("メモ・今日のコンディション(フォーム、靴の摩耗など)")
 
     submit_button = st.form_submit_button(label="記録を保存する")
@@ -81,7 +80,7 @@ if submit_button:
 
             #日付をスプレッドシートが100％自動認識できる文字形式に変換して送信
             date_str = date.strftime("%Y-%m-%d")
-            row = [date_str, distance, duration_min, formula_7d, formula_30d, comment]
+            row = [date_str, distance, formula_7d, formula_30d, comment]
 
             # 最新のgspread仕様に合わせた、リストのリスト形式で一括流し込み
             worksheet.append_rows([row], value_input_option="USER_ENTERED")
