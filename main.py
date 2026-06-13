@@ -6,7 +6,7 @@ from google.oauth2.service_account import Credentials
 import datetime
 
 # 【追加】カレンダーの曜日の修正
-st.set_page_config(page_title="RUNNING LOG", layout="centered")
+#st.set_page_config(page_title="RUNNING LOG", layout="centered")
 
 
 #==============================================
